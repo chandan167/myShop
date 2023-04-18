@@ -2,10 +2,19 @@ import { Schema, InferSchemaType, model } from 'mongoose';
 
 
 const adminSchema = new Schema({
-	isSuperAdmin: {type: Boolean, default: false},
+	userId: {
+		type: Schema.Types.ObjectId,
+		require: true,
+		unique: true,
+		ref: 'User',
+	},
+	isSuperAdmin: { type: Boolean, default: false },
+	permissions: {
+		type: [String],
+		default: []
+	}
 });
 
-export type User = InferSchemaType<typeof adminSchema>;
+export type Admin = InferSchemaType<typeof adminSchema>;
 
-
-export const UserModel = model('Admin', adminSchema);
+export const AdminModel = model<Admin>('Admin', adminSchema);

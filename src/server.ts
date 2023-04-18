@@ -35,7 +35,6 @@ export default class Server {
 			if(err instanceof HttpError){
 				return res.status(err.status).json({message: err.message});
 			}
-
 		});
 	}
 
