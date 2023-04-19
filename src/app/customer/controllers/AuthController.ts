@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { StatusCodes } from 'http-status-codes';
-import { CustomerModel } from "../../models/CustomerModel";
+import { CustomerModel } from "../../../models/CustomerModel";
 
 
 export class AuthController {

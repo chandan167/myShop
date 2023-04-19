@@ -1,6 +1,6 @@
-enum Role {
+enum Profile {
     ADMIN='Admin', 
     CUSTOMER='Customer'
 }
 
-export default Role;
+export default Profile;

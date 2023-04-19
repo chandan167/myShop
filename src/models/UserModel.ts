@@ -1,13 +1,13 @@
 import { Schema, InferSchemaType, model } from 'mongoose';
-import Role from '../config/role';
+import Profile from '../config/profile';
 import { hash } from '../utils/password';
 
 
 const userSchema = new Schema({
 	firstName: { type: String, required: true },
-	lastName: { type: String },
+	lastName: { type: String, default: null },
 	email: { type: String, required: true, unique: true },
-	phone: { type: String, index: true },
+	phone: { type: String, index: true, default: null },
 	emailVerifiedAt: { type: Date, default: null },
 	phoneVerifiedAt: { type: Date, default: null },
 	avatar: { type: String, default: null },
@@ -17,10 +17,23 @@ const userSchema = new Schema({
 		// Instead of a hardcoded model name in `ref`, `refPath` means Mongoose
 		// will look at the `docModel` property to find the right model.
 		index: true,
-		refPath: 'role',
+		refPath: 'profileType',
 		autopopulate: true
 	},
-	role: { type: String, enum: Object.values(Role), default: Role.CUSTOMER },
+	profileType: { type: String, enum: Object.values(Profile), default: Profile.CUSTOMER },
+}, {
+	toJSON: {
+		transform(doc, ret) {
+			ret.id = ret._id;
+			delete ret.password;
+			delete ret.__v;
+		}
+	},
+	toObject: {
+		transform(doc, ret) {
+			ret.id = ret._id;
+		}
+	}
 });
 
 export type User = InferSchemaType<typeof userSchema>;

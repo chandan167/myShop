@@ -3,7 +3,7 @@ import validateEnv from './utils/validate-env';
 import {dbConnect} from './database';
 import { UserModel } from './models/UserModel';
 import { AdminModel } from './models/AdminModel';
-import Role from './config/role';
+import Role from './config/profile';
 
 dbConnect();
 

@@ -1,5 +1,6 @@
 import { Schema, InferSchemaType, model, Model, HydratedDocument } from 'mongoose';
 import { User, UserModel } from './UserModel';
+import Profile from '../config/profile';
 
 
 const adminSchema = new Schema({
@@ -24,6 +25,7 @@ interface IAdminModel extends Model<Admin> {
 
 
 adminSchema.static('createAdmin', async function(user:User, admin:Admin){
+	user.profileType = Profile.ADMIN;
 	const newUser:HydratedDocument<User> = await UserModel.create(user);
 	admin.userId = newUser._id;
 	const newAdmin:HydratedDocument<Admin> = await this.create(admin);
