@@ -1,4 +1,5 @@
-import { Schema, InferSchemaType, model } from 'mongoose';
+import { Schema, InferSchemaType, model, Model, HydratedDocument } from 'mongoose';
+import { User, UserModel } from './UserModel';
 
 
 const adminSchema = new Schema({
@@ -17,4 +18,20 @@ const adminSchema = new Schema({
 
 export type Admin = InferSchemaType<typeof adminSchema>;
 
-export const AdminModel = model<Admin>('Admin', adminSchema);
+interface IAdminModel extends Model<Admin> {
+	createAdmin(user:User,admin:Admin): Promise<User>;
+  }
+
+
+adminSchema.static('createAdmin', async function(user:User, admin:Admin){
+	const newUser:HydratedDocument<User> = await UserModel.create(user);
+	admin.userId = newUser._id;
+	const newAdmin:HydratedDocument<Admin> = await this.create(admin);
+
+	newUser.profile = newAdmin._id;
+	await newUser.save();
+	newUser.profile = newAdmin as any
+	return newUser
+})
+
+export const AdminModel = model<Admin, IAdminModel>('Admin', adminSchema);
