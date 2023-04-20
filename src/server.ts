@@ -46,11 +46,11 @@ export default class Server {
 				return res.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
 					message: err.message,
 					stack: err.stack
-				})
+				});
 			}
 
-			logger.error([err.message,  err.stack])
-			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Something went wrong please try after sometime' })
+			logger.error([err.message,  err.stack]);
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Something went wrong please try after sometime' });
 		});
 	}
 

@@ -14,8 +14,6 @@ const userSchema = new Schema({
 	password: { type: String, required: true },
 	profile: {
 		type: Schema.Types.ObjectId,
-		// Instead of a hardcoded model name in `ref`, `refPath` means Mongoose
-		// will look at the `docModel` property to find the right model.
 		index: true,
 		refPath: 'profileType',
 		autopopulate: true
@@ -38,11 +36,13 @@ const userSchema = new Schema({
 
 export type User = InferSchemaType<typeof userSchema>;
 
+// @typescript-eslint/no-var-requires
+userSchema.plugin(require('mongoose-autopopulate'));
 userSchema.pre('save', async function (next) {
 	if (this.isModified('password')) {
 		this.password = await hash(this.password);
 	}
 	next();
-})
+});
 
 export const UserModel = model<User>('User', userSchema);

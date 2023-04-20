@@ -12,6 +12,8 @@ const environment = Object.freeze({
 	PORT: Number(env['PORT'] || 3000),
 	LOG_DIR: env['LOG_DIR'] || 'logs',
 	MONGO_URI: env['MONGO_URI'] || '',
+	JWT_EXPIRE: env['JWT_EXPIRE'] || '10d',
+	JWT_REFRESH_EXPIRE: env['JWT_REFRESH_EXPIRE'] || '100d'
 });
 
 export default environment;

@@ -4,15 +4,14 @@ import { logger } from './utils/logger';
 
 
 let retry = 1;
-mongoose.plugin(require('mongoose-autopopulate'))
 function connectDatabase() {
 	if (environment.NODE_ENV !== 'production') {
 		mongoose.set('debug', true);
 	}
 	return mongoose.connect(environment.MONGO_URI, {
 		autoIndex: true,
-	}).then(async connection =>{
-		console.log('Database connected')
+	}).then( () =>{
+		console.log('Database connected');
 	});
 }
 

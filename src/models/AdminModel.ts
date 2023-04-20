@@ -32,8 +32,8 @@ adminSchema.static('createAdmin', async function(user:User, admin:Admin){
 
 	newUser.profile = newAdmin._id;
 	await newUser.save();
-	newUser.profile = newAdmin as any
-	return newUser
-})
+	newUser.profile = newAdmin as any;
+	return newUser;
+});
 
 export const AdminModel = model<Admin, IAdminModel>('Admin', adminSchema);
