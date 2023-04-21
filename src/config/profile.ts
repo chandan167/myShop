@@ -1,6 +1,6 @@
 enum Profile {
-    ADMIN='Admin', 
-    CUSTOMER='Customer'
+    SELLER='SELLER', 
+    CUSTOMER='CUSTOMER'
 }
 
 export default Profile;

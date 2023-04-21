@@ -3,7 +3,7 @@ import { Unauthorized } from 'http-errors';
 import Profile from '../config/profile';
 import { JwtUtil } from '../utils/jwt';
 import { UserService } from '../services/user-service';
-import { User } from '../models/UserModel';
+import { IUserDocument } from '../models/UserModel';
 
 
 export function auth(profile: Profile): RequestHandler {
@@ -18,7 +18,7 @@ export function auth(profile: Profile): RequestHandler {
 			const decodeData: any = JwtUtil.verifyAuthToken(token[1], req.headers['user-agent'] as string);
 			if (decodeData.profileType !== profile) next(new Unauthorized('Invalid Auth token'));
 			req.auth = {
-				user: await UserService.findById(decodeData.id) as User
+				user: await UserService.findById(decodeData.id) as IUserDocument
 			};
 			next();
 

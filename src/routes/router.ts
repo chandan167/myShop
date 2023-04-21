@@ -1,9 +1,9 @@
 import {Router} from 'express';
 import { groupRoute } from '../utils/helper';
-import { customerRoute } from '../app/customer/customer.router';
+import { userRoute } from '../app/user/user.router';
 
 export const router = Router();
 
 router.use('/api/v1',groupRoute(router =>{
-	router.use('/customer', customerRoute);
+	router.use('/user', userRoute);
 }));

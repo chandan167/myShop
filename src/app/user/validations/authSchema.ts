@@ -8,3 +8,7 @@ export const signUpSchema =  Joi.object({
 	password: Joi.string().required().label('Password'),
 	confirmPassword: Joi.any().required().valid(Joi.ref('password')).label('Confirm Password').messages({'any.only': 'Confirm Password must be match with password'})
 });
+
+export const sendAccountVerificationMailSchema =  Joi.object({
+	email: Joi.string().required().email().label('Email')
+});
