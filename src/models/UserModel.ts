@@ -11,8 +11,9 @@ export interface IUser{
 	emailVerifiedAt? : string|Date|null;
 	phoneVerifiedAt? : string|Date|null;
 	avatar: string|null;
-	password: string,
-	profileType: Profile
+	password: string;
+	profileType: Profile;
+	wallet?:number;
 }
 
 export interface IUserDocument extends IUser, Document{
@@ -38,6 +39,7 @@ const userSchema = new Schema<IUserDocument>({
 	avatar: { type: String, default: null },
 	password: { type: String, required: true },
 	profileType: { type: String, enum: Object.values(Profile), default: Profile.CUSTOMER },
+	wallet: {type: Number, default:0}
 }, {
 	timestamps: true,
 	toJSON: {

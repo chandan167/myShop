@@ -16,7 +16,7 @@ export class AuthController {
 		const { firstName, lastName, email, phone, password } = req.body;
 		const user = await UserService.signUp({ firstName, lastName, email, phone, password } as IUser);
 		const token = JwtUtil.generateToken({ id: user._id, profileType: user.profileType }, req.get('user-agent') as string);
-		res.status(StatusCodes.CREATED).json(token);
+		res.status(StatusCodes.CREATED).json({token});
 	};
 
 	static signIn: RequestHandler = async (req, res, _next) =>{
@@ -24,13 +24,13 @@ export class AuthController {
 		const user = await UserService.findByEmail(email);
 		if(!user || !await user.validatePassword(password)) throw new Unauthorized('Invalid credential');
 		const token = JwtUtil.generateToken({ id: user._id, profileType: user.profileType }, req.get('user-agent') as string);
-		res.json(token);
+		res.json({token});
 	};
 	
 
 	static profile: RequestHandler = async (req, res, _next) => {
 		const user = req.auth.user;
-		res.json(user);
+		res.json({user});
 	};
 
 

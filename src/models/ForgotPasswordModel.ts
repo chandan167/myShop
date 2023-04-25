@@ -1,15 +1,27 @@
-import { HydratedDocument, InferSchemaType, Model, model, Schema } from 'mongoose';
+import { Document, Model, model, Schema } from 'mongoose';
 import { DateUtil } from '../utils/date';
 
-export type ForgotPassword = HydratedDocument<InferSchemaType<typeof forgotPasswordSchema>>;
-
-interface IForgotPasswordMethod {
-    verifyExpireAt(): boolean;
+export interface IForgotPassword {
+	userId: Schema.Types.ObjectId;
+	email?: string | null;
+	phone?: string | null;
+	expireAt: number;
+	token?: string | null;
+	otp?: string | null;
 }
 
-export type IForgotPasswordModel = Model<ForgotPassword, object, IForgotPasswordMethod>
+export interface IForgotPasswordDocument extends IForgotPassword, Document {
+	isExpire(): boolean;
+}
 
-const forgotPasswordSchema = new Schema<object, IForgotPasswordModel, IForgotPasswordMethod>(
+interface IForgotPasswordModel extends Model<IForgotPasswordDocument> {
+	findByEmail(email: string): Promise<IForgotPasswordDocument | null>;
+	findByPhone(phone: string): Promise<IForgotPasswordDocument | null>;
+	findByToken(token: string): Promise<IForgotPasswordDocument | null>;
+}
+
+
+const forgotPasswordSchema = new Schema<IForgotPasswordDocument>(
 	{
 		userId: {
 			type: Schema.Types.ObjectId,
@@ -58,8 +70,21 @@ const forgotPasswordSchema = new Schema<object, IForgotPasswordModel, IForgotPas
 
 
 
-forgotPasswordSchema.method('verifyExpireAt', function verifyExpireAt() {
+forgotPasswordSchema.method('isExpire', function verifyExpireAt() {
 	return DateUtil.now() < this.expireAt;
 });
 
-export const ForgotPasswordModel = model<ForgotPassword, IForgotPasswordModel>('ForgotPassword', forgotPasswordSchema);
+forgotPasswordSchema.static('findByEmail', async function findByEmail(email:string):Promise<IForgotPasswordDocument | null> {
+	return this.findOne({email});
+});
+
+forgotPasswordSchema.static('findByPhone', async function findByPhone(phone:string):Promise<IForgotPasswordDocument | null> {
+	return this.findOne({phone});
+});
+
+forgotPasswordSchema.static('findByToken', async function findByToken(token:string):Promise<IForgotPasswordDocument | null> {
+	return this.findOne({token});
+});
+
+
+export const ForgotPasswordModel = model<IForgotPasswordDocument, IForgotPasswordModel>('ForgotPassword', forgotPasswordSchema);
